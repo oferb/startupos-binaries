@@ -57,3 +57,15 @@ wget https://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-apple-darwin.tar.xz
 tar -xf clang+llvm-6.0.0-x86_64-apple-darwin.tar.xz clang+llvm-6.0.0-x86_64-apple-darwin/bin/clang-format
 cp clang+llvm-6.0.0-x86_64-apple-darwin/bin/clang-format clang_format_bin_osx
 ```
+
+### tsfmt
+
+[`tsfmt`](https://github.com/vvakame/typescript-formatter) is implemented in TypeScript which requires to bring in
+whole `node` runtime. Instead, we build a self-contained binary which doesn't depend on having `node` installed
+using [`pkg` utility](https://github.com/zeit/pkg). To make building reproducible, we do it inside Docker container:
+
+```
+docker run -v $(pwd):/binaries/ -it node:10 /binaries/tsfmt-build.sh
+# resulting binaries are 'cli-linux', 'cli-macos', 'cli-win.exe' placed in current directory
+zip -r tsfmt.zip cli-* # pack them into one archive
+```
